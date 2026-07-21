@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>الطلاب | نظام الإدارة</title>
+    <link rel="stylesheet" href="./studentList.css" />
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+    <script>
+      (function () {
+        var saved = localStorage.getItem("theme");
+        if (saved === "dark")
+          document.documentElement.setAttribute("data-theme", "dark");
+      })();
+    </script>
+  </head>
+  <body>
+    <div class="app">
+      <div class="main">
+        <header class="topbar">
+          <button
+            class="topbar__menu-btn"
+            id="menuBtn"
+            aria-label="فتح القائمة"
+          >
+            <i class="fa-solid fa-bars"></i>
+          </button>
+          <div class="topbar__actions">
+            <button
+              class="theme-toggle"
+              id="themeToggleBtn"
+              aria-label="تبديل الوضع الليلي"
+            >
+              <i class="fa-solid fa-sun" id="themeIcon"></i>
+            </button>
+            <button
+              class="topbar__icon-btn"
+              id="notifBtn"
+              aria-label="الإشعارات"
+            >
+              <i class="fa-regular fa-bell"></i>
+            </button>
+            <div class="topbar__admin">
+              <span>المشرف</span>
+              <i class="fa-solid fa-chevron-down topbar__chevron"></i>
+            </div>
+          </div>
+        </header>
+
+        <main class="page">
+          <div class="page__top">
+            <div>
+              <nav class="breadcrumb" aria-label="مسار التنقل">
+                <a href="#">الرئيسية</a>
+                <span>/</span>
+                <span>الطلاب</span>
+              </nav>
+              <h1 class="page__title">الطلاب</h1>
+            </div>
+
+            <button class="btn btn--outline" id="backBtn">
+              <i class="fa-solid fa-arrow-right"></i> الرجوع للرئيسية
+            </button>
+          </div>
+
+          <div class="notice notice--info">
+            <div class="notice__icon">
+              <i class="fa-solid fa-circle-info"></i>
+            </div>
+            <div>
+              <h3 class="notice__title">تصفح الطلاب</h3>
+              <p class="notice__text">اضغط على أي طالب لعرض ملفه الشخصي.</p>
+            </div>
+          </div>
+
+          <div class="card card--filters">
+            <div class="filters">
+              <div class="filters__search">
+                <i
+                  class="fa-solid fa-magnifying-glass filters__search-icon"
+                ></i>
+                <input
+                  type="text"
+                  id="searchInput"
+                  placeholder="ابحث بالاسم أو الرقم الجامعي..."
+                />
+              </div>
+
+              <select id="filterDepartment">
+                <option value="">كل الأقسام</option>
+                <option value="Computer Science">علوم الحاسب</option>
+                <option value="Information Systems">نظم المعلومات</option>
+                <option value="Software Engineering">هندسة البرمجيات</option>
+                <option value="Information Technology">
+                  تكنولوجيا المعلومات
+                </option>
+              </select>
+
+              <select id="filterLevel">
+                <option value="">كل المستويات</option>
+                <option value="1">المستوى الأول</option>
+                <option value="2">المستوى الثاني</option>
+                <option value="3">المستوى الثالث</option>
+                <option value="4">المستوى الرابع</option>
+              </select>
+
+              <select id="filterStatus">
+                <option value="">كل الحالات</option>
+                <option value="active">فعّال</option>
+                <option value="inactive">غير فعّال</option>
+              </select>
+
+              <button class="btn btn--outline" id="filterBtn">
+                <i class="fa-solid fa-filter"></i> فلترة
+              </button>
+            </div>
+          </div>
+
+          <div class="card card--table">
+            <div class="table-wrap">
+              <table class="table" id="studentsTable">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>الرقم الجامعي</th>
+                    <th>الاسم بالكامل</th>
+                    <th>القسم</th>
+                    <th>المستوى</th>
+                    <th>الحالة</th>
+                    <th>الملف الشخصي</th>
+                  </tr>
+                </thead>
+                <tbody id="tableBody"></tbody>
+              </table>
+
+              <div class="table-empty" id="tableEmpty" hidden>
+                لاتوجد نتائج مطابقة للبحث
+              </div>
+            </div>
+
+            <div class="pagination">
+              <div class="pagination__size">
+                <span>عرض</span>
+                <select id="pageSizeSelect">
+                  <option value="10">10</option>
+                  <option value="25">25</option>
+                  <option value="50">50</option>
+                </select>
+                <span>عنصر</span>
+              </div>
+
+              <div class="pagination__pages" id="paginationPages"></div>
+            </div>
+          </div>
+
+          <div class="page-actions">
+            <button class="btn btn--primary" id="goToAddBtn">
+              <i class="fa-solid fa-user-plus"></i> إضافة طالب
+            </button>
+          </div>
+        </main>
+      </div>
+    </div>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <script src="./studentList.js"></script>
+  </body>
+</html>
