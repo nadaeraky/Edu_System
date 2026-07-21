@@ -614,7 +614,7 @@ textarea {
     flex-direction: column;
   }
   .form-card__header {
-    padding: 0 20px 20px;
+    padding: 65px 20px 20px;
   }
   .form-body {
     padding: 4px 20px 4px;
