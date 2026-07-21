@@ -485,7 +485,7 @@ button {
     flex-direction: column;
   }
   .profile__header {
-    padding: 0 20px 20px;
+    padding: 65px 20px 20px;
   }
   .profile__body {
     padding: 4px 20px 24px;
