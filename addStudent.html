@@ -1,0 +1,872 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>إضافة طالب جديد | نظام الإدارة</title>
+    <link rel="stylesheet" href="./style.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+    <script>
+      (function () {
+        var saved = localStorage.getItem("theme");
+        if (saved === "dark")
+          document.documentElement.setAttribute("data-theme", "dark");
+      })();
+    </script>
+  </head>
+  <body>
+    <div class="app">
+      <!-- ===== Sidebar ===== -->
+      <!-- <aside class="sidebar" id="sidebar">
+      <div class="sidebar__brand">
+        <div class="sidebar__logo"><i class="fa-solid fa-graduation-cap"></i></div>
+        <div class="sidebar__brand-text">
+          <strong>كلية</strong>
+          <span>نظام الإدارة</span>
+        </div>
+      </div>
+
+      <nav class="sidebar__nav">
+        <a href="#" class="nav-item" data-nav="dashboard">
+          <i class="fa-solid fa-house nav-item__icon"></i> لوحة التحكم
+        </a>
+        <a href="#" class="nav-item nav-item--active" data-nav="students">
+          <i class="fa-solid fa-users nav-item__icon"></i> الطلاب
+        </a>
+        <a href="#" class="nav-item" data-nav="courses">
+          <i class="fa-solid fa-clipboard-list nav-item__icon"></i> المقررات
+        </a>
+        <a href="#" class="nav-item" data-nav="departments">
+          <i class="fa-solid fa-building nav-item__icon"></i> الأقسام
+        </a>
+        <a href="#" class="nav-item" data-nav="reports">
+          <i class="fa-solid fa-chart-column nav-item__icon"></i> التقارير
+        </a>
+        <a href="#" class="nav-item" data-nav="users">
+          <i class="fa-solid fa-user nav-item__icon"></i> المستخدمون
+        </a>
+        <a href="#" class="nav-item" data-nav="settings">
+          <i class="fa-solid fa-gear nav-item__icon"></i> الإعدادات
+        </a>
+      </nav>
+
+      <a href="#" class="sidebar__logout" id="logoutBtn">
+        <i class="fa-solid fa-right-from-bracket nav-item__icon"></i> تسجيل الخروج
+      </a>
+    </aside> -->
+
+      <div class="main">
+        <header class="topbar">
+          <button
+            class="topbar__menu-btn"
+            id="menuBtn"
+            aria-label="فتح القائمة"
+          >
+            <i class="fa-solid fa-bars"></i>
+          </button>
+
+          <div class="topbar__actions">
+            <button
+              class="theme-toggle"
+              id="themeToggleBtn"
+              aria-label="تبديل الوضع الليلي"
+            >
+              <i class="fa-solid fa-sun" id="themeIcon"></i>
+            </button>
+            <button
+              class="topbar__icon-btn"
+              id="notifBtn"
+              aria-label="الإشعارات"
+            >
+              <i class="fa-regular fa-bell"></i>
+              <span class="topbar__badge"></span>
+            </button>
+            <div class="topbar__admin">
+              <!-- <div class="topbar__avatar"></div> -->
+              <span>المشرف</span>
+              <i class="fa-solid fa-chevron-down topbar__chevron"></i>
+            </div>
+          </div>
+        </header>
+
+        <main class="page">
+          <div class="page__top">
+            <div>
+              <nav class="breadcrumb" aria-label="مسار التنقل">
+                <a href="#">الطلاب</a>
+                <span>/</span>
+                <span>إضافة طالب</span>
+              </nav>
+              <h1 class="page__title">إضافة طالب جديد</h1>
+              <p class="page__subtitle">أدخل بيانات الطالب ثم احفظ</p>
+            </div>
+
+            <button class="btn btn--outline" id="backBtn">
+              <i class="fa-solid fa-arrow-right"></i> الرجوع للرئيسية
+            </button>
+          </div>
+
+          <!-- Step indicator -->
+          <ol class="wizard-steps" id="wizardSteps">
+            <li
+              class="wizard-steps__item wizard-steps__item--active"
+              data-step-indicator="1"
+            >
+              <span class="wizard-steps__circle">1</span>
+              <span class="wizard-steps__label">البيانات الشخصية</span>
+            </li>
+            <li class="wizard-steps__item" data-step-indicator="2">
+              <span class="wizard-steps__circle">2</span>
+              <span class="wizard-steps__label"
+                >البيانات الإضافية والأكاديمية</span
+              >
+            </li>
+            <li class="wizard-steps__item" data-step-indicator="3">
+              <span class="wizard-steps__circle">3</span>
+              <span class="wizard-steps__label">البيانات العائلية</span>
+            </li>
+          </ol>
+
+          <form class="card" id="studentForm" novalidate>
+            <section
+              class="form-section wizard-step wizard-step--active"
+              data-step="1"
+            >
+              <h2 class="form-section__title">البيانات الشخصية</h2>
+
+              <div class="form-grid">
+                <div class="field">
+                  <label for="arabFullName">اسم الطالب رباعي (عربي)</label>
+                  <input
+                    type="text"
+                    id="arabFullName"
+                    name="arabFullName"
+                    placeholder="أدخل الاسم رباعي باللغة العربية"
+                    autocomplete="name"
+                  />
+                  <span
+                    class="field__error"
+                    data-error-for="arabFullName"
+                  ></span>
+                </div>
+
+                <div class="field">
+                  <label for="phone">رقم الهاتف</label>
+                  <input
+                    type="tel"
+                    id="phone"
+                    name="phone"
+                    placeholder="أدخل رقم الهاتف"
+                    autocomplete="tel"
+                  />
+                  <span class="field__error" data-error-for="phone"></span>
+                </div>
+
+                <div class="field">
+                  <label for="governorate">المحافظة</label>
+                  <select id="governorate" name="governorate">
+                    <option value="" selected disabled>اختر المحافظة</option>
+                    <option value="دمياط">دمياط</option>
+                    <option value="بورسعيد">بورسعيد</option>
+                    <option value="المنصورة">المنصورة</option>
+                    <option value="أخرى">أخرى</option>
+                  </select>
+                  <span
+                    class="field__error"
+                    data-error-for="governorate"
+                  ></span>
+                </div>
+
+                <div class="field">
+                  <label for="gender">النوع</label>
+                  <select id="gender" name="gender">
+                    <option value="" selected disabled>اختر النوع</option>
+                    <option value="male">ذكر</option>
+                    <option value="female">أنثى</option>
+                  </select>
+                  <span class="field__error" data-error-for="gender"></span>
+                </div>
+
+                <div class="field">
+                  <label for="dob">تاريخ الميلاد</label>
+                  <input type="date" id="dob" name="dob" />
+                  <span class="field__error" data-error-for="dob"></span>
+                </div>
+
+                <div class="field">
+                  <label for="idType">نوع رقم الهوية</label>
+                  <select id="idType" name="idType">
+                    <option value="" selected disabled>اختر نوع الهوية</option>
+                    <option value="national">رقم قومي</option>
+                    <option value="passport">رقم جواز السفر</option>
+                  </select>
+                  <span class="field__error" data-error-for="idType"></span>
+                </div>
+
+                <div class="field" id="idNumberField" hidden>
+                  <label for="idNumber" id="idNumberLabel">رقم الهوية</label>
+                  <input
+                    type="text"
+                    id="idNumber"
+                    name="idNumber"
+                    placeholder="أدخل الرقم"
+                    inputmode="numeric"
+                  />
+                  <span class="field__error" data-error-for="idNumber"></span>
+                </div>
+              </div>
+            </section>
+
+            <section class="form-section wizard-step" data-step="2">
+              <h2 class="form-section__title">بيانات إضافية</h2>
+
+              <div class="form-grid">
+                <div class="field">
+                  <label for="englishFullName"
+                    >اسم الطالب رباعي (إنجليزي)</label
+                  >
+                  <input
+                    type="text"
+                    id="englishFullName"
+                    name="englishFullName"
+                    placeholder="Full name in English"
+                  />
+                  <span
+                    class="field__error"
+                    data-error-for="englishFullName"
+                  ></span>
+                </div>
+
+                <div class="field field--span-2">
+                  <label for="address">العنوان</label>
+                  <input
+                    type="text"
+                    id="address"
+                    name="address"
+                    placeholder="أدخل العنوان"
+                  />
+                  <span class="field__error" data-error-for="address"></span>
+                </div>
+
+                <div class="field">
+                  <label for="country">الدولة</label>
+                  <input
+                    type="text"
+                    id="country"
+                    name="country"
+                    placeholder="أدخل الدولة"
+                    value="مصر"
+                  />
+                  <span class="field__error" data-error-for="country"></span>
+                </div>
+
+                <div class="field">
+                  <label for="maritalStatus">الحالة الاجتماعية</label>
+                  <select id="maritalStatus" name="maritalStatus">
+                    <option value="" selected disabled>
+                      اختر الحالة الاجتماعية
+                    </option>
+                    <option value="single">أعزب</option>
+                    <option value="married">متزوج</option>
+                  </select>
+                  <span
+                    class="field__error"
+                    data-error-for="maritalStatus"
+                  ></span>
+                </div>
+
+                <div class="field">
+                  <label for="religion">الديانة</label>
+                  <select id="religion" name="religion">
+                    <option value="" selected disabled>اختر الديانة</option>
+                    <option value="muslim">مسلم</option>
+                    <option value="christian">مسيحي</option>
+                    <option value="other">أخرى</option>
+                  </select>
+                  <span class="field__error" data-error-for="religion"></span>
+                </div>
+
+                <div class="field">
+                  <label for="cardIssuePlace">جهة صدور البطاقة</label>
+                  <input
+                    type="text"
+                    id="cardIssuePlace"
+                    name="cardIssuePlace"
+                    placeholder="أدخل جهة صدور البطاقة"
+                  />
+                  <span
+                    class="field__error"
+                    data-error-for="cardIssuePlace"
+                  ></span>
+                </div>
+
+                <div class="field">
+                  <label for="dataEntryDate">تاريخ إدخال البيانات</label>
+                  <input type="date" id="dataEntryDate" name="dataEntryDate" />
+                  <span
+                    class="field__error"
+                    data-error-for="dataEntryDate"
+                  ></span>
+                </div>
+
+                <div class="field">
+                  <label for="oneChanceStudent">طالب دور (فرصة واحدة)</label>
+                  <select id="oneChanceStudent" name="oneChanceStudent">
+                    <option value="" selected disabled>اختر</option>
+                    <option value="yes">نعم</option>
+                    <option value="no">لا</option>
+                  </select>
+                  <span
+                    class="field__error"
+                    data-error-for="oneChanceStudent"
+                  ></span>
+                </div>
+
+                <div class="field">
+                  <label for="studyType">نظام الدراسة</label>
+                  <select id="studyType" name="studyType">
+                    <option value="" selected disabled>اختر النظام</option>
+                    <option value="semesters">فصول دراسية</option>
+                    <option value="hours">ساعات معتمدة</option>
+                  </select>
+                  <span class="field__error" data-error-for="studyType"></span>
+                </div>
+              </div>
+
+              <h2 class="form-section__title form-section__title--sub">
+                بيانات المؤهل السابق
+              </h2>
+
+              <div class="form-grid">
+                <div class="field">
+                  <label for="qualification">المؤهل</label>
+                  <select id="qualification" name="qualification">
+                    <option value="" selected disabled>اختر المؤهل</option>
+                    <option value="high_school">ثانوية عامة</option>
+                    <option value="diploma">دبلوم</option>
+                    <option value="other">أخرى</option>
+                  </select>
+                  <span
+                    class="field__error"
+                    data-error-for="qualification"
+                  ></span>
+                </div>
+
+                <div class="field">
+                  <label for="qualificationYear">سنة الحصول على المؤهل</label>
+                  <input
+                    type="number"
+                    id="qualificationYear"
+                    name="qualificationYear"
+                    placeholder="مثال: 2024"
+                    min="1970"
+                    max="2100"
+                  />
+                  <span
+                    class="field__error"
+                    data-error-for="qualificationYear"
+                  ></span>
+                </div>
+
+                <div class="field">
+                  <label for="schoolName">اسم المدرسة</label>
+                  <input
+                    type="text"
+                    id="schoolName"
+                    name="schoolName"
+                    placeholder="أدخل اسم المدرسة"
+                  />
+                  <span class="field__error" data-error-for="schoolName"></span>
+                </div>
+
+                <div class="field">
+                  <label for="total">المجموع</label>
+                  <input
+                    type="number"
+                    id="total"
+                    name="total"
+                    placeholder="أدخل المجموع"
+                    step="0.01"
+                    min="0"
+                  />
+                  <span class="field__error" data-error-for="total"></span>
+                </div>
+
+                <div class="field">
+                  <label for="seatNumber">رقم الجلوس</label>
+                  <input
+                    type="text"
+                    id="seatNumber"
+                    name="seatNumber"
+                    placeholder="أدخل رقم الجلوس"
+                    inputmode="numeric"
+                  />
+                  <span class="field__error" data-error-for="seatNumber"></span>
+                </div>
+
+                <div class="field">
+                  <label for="enrollmentStatus">حالة القيد</label>
+                  <select id="enrollmentStatus" name="enrollmentStatus">
+                    <option value="" selected disabled>اختر حالة القيد</option>
+                    <option value="new">قيد جديد</option>
+                    <option value="transferred">محول</option>
+                    <option value="repeated">إعادة قيد</option>
+                  </select>
+                  <span
+                    class="field__error"
+                    data-error-for="enrollmentStatus"
+                  ></span>
+                </div>
+
+                <div class="field">
+                  <label for="enrollmentType">نوع القيد</label>
+                  <select id="enrollmentType" name="enrollmentType">
+                    <option value="" selected disabled>اختر نوع القيد</option>
+                    <option value="general">عام</option>
+                    <option value="transferred_from_other">
+                      تحويل من كلية أخرى
+                    </option>
+                    <option value="reserved">احتياطي</option>
+                  </select>
+                  <span
+                    class="field__error"
+                    data-error-for="enrollmentType"
+                  ></span>
+                </div>
+
+                <div class="field">
+                  <label for="coordinationNumber">رقم كشف التنسيق</label>
+                  <input
+                    type="text"
+                    id="coordinationNumber"
+                    name="coordinationNumber"
+                    placeholder="أدخل رقم كشف التنسيق"
+                  />
+                  <span
+                    class="field__error"
+                    data-error-for="coordinationNumber"
+                  ></span>
+                </div>
+              </div>
+            </section>
+
+            <section class="form-section wizard-step" data-step="3">
+              <h2 class="form-section__title">البيانات العائلية</h2>
+
+              <div class="form-grid">
+                <div class="field">
+                  <label for="fatherName">اسم الأب</label>
+                  <input
+                    type="text"
+                    id="fatherName"
+                    name="fatherName"
+                    placeholder="أدخل اسم الأب"
+                  />
+                  <span class="field__error" data-error-for="fatherName"></span>
+                </div>
+
+                <div class="field">
+                  <label for="motherName">اسم الأم</label>
+                  <input
+                    type="text"
+                    id="motherName"
+                    name="motherName"
+                    placeholder="أدخل اسم الأم"
+                  />
+                  <span class="field__error" data-error-for="motherName"></span>
+                </div>
+
+                <div class="field">
+                  <label for="fatherJob">مهنة الأب</label>
+                  <input
+                    type="text"
+                    id="fatherJob"
+                    name="fatherJob"
+                    placeholder="أدخل مهنة الأب"
+                  />
+                  <span class="field__error" data-error-for="fatherJob"></span>
+                </div>
+
+                <div class="field">
+                  <label for="motherJob">مهنة الأم</label>
+                  <input
+                    type="text"
+                    id="motherJob"
+                    name="motherJob"
+                    placeholder="أدخل مهنة الأم"
+                  />
+                  <span class="field__error" data-error-for="motherJob"></span>
+                </div>
+
+                <div class="field">
+                  <label for="fatherWorkplace">جهة عمل الأب</label>
+                  <input
+                    type="text"
+                    id="fatherWorkplace"
+                    name="fatherWorkplace"
+                    placeholder="أدخل جهة عمل الأب"
+                  />
+                  <span
+                    class="field__error"
+                    data-error-for="fatherWorkplace"
+                  ></span>
+                </div>
+
+                <div class="field">
+                  <label for="motherWorkplace">جهة عمل الأم</label>
+                  <input
+                    type="text"
+                    id="motherWorkplace"
+                    name="motherWorkplace"
+                    placeholder="أدخل جهة عمل الأم"
+                  />
+                  <span
+                    class="field__error"
+                    data-error-for="motherWorkplace"
+                  ></span>
+                </div>
+
+                <div class="field">
+                  <label for="fatherPhone">هاتف الأب</label>
+                  <input
+                    type="tel"
+                    id="fatherPhone"
+                    name="fatherPhone"
+                    placeholder="أدخل هاتف الأب"
+                  />
+                  <span
+                    class="field__error"
+                    data-error-for="fatherPhone"
+                  ></span>
+                </div>
+
+                <div class="field">
+                  <label for="motherPhone">هاتف الأم</label>
+                  <input
+                    type="tel"
+                    id="motherPhone"
+                    name="motherPhone"
+                    placeholder="أدخل هاتف الأم"
+                  />
+                  <span
+                    class="field__error"
+                    data-error-for="motherPhone"
+                  ></span>
+                </div>
+
+                <div class="field field--checkbox field--span-2">
+                  <label class="checkbox-label" for="isFatherDeceased">
+                    <input
+                      type="checkbox"
+                      id="isFatherDeceased"
+                      name="isFatherDeceased"
+                    />
+                    الأب متوفي
+                  </label>
+                </div>
+              </div>
+
+              <div id="guardianSection" hidden>
+                <h2 class="form-section__title form-section__title--sub">
+                  بيانات ولي الأمر
+                </h2>
+                <div class="form-grid">
+                  <div class="field">
+                    <label for="guardianName">اسم ولي الأمر</label>
+                    <input
+                      type="text"
+                      id="guardianName"
+                      name="guardianName"
+                      placeholder="أدخل اسم ولي الأمر"
+                    />
+                    <span
+                      class="field__error"
+                      data-error-for="guardianName"
+                    ></span>
+                  </div>
+
+                  <div class="field">
+                    <label for="guardianRelation"
+                      >درجة القرابة لولي الأمر</label
+                    >
+                    <input
+                      type="text"
+                      id="guardianRelation"
+                      name="guardianRelation"
+                      placeholder="مثال: عم، خال، أخ"
+                    />
+                    <span
+                      class="field__error"
+                      data-error-for="guardianRelation"
+                    ></span>
+                  </div>
+
+                  <div class="field">
+                    <label for="guardianWorkplace">جهة عمل ولي الأمر</label>
+                    <input
+                      type="text"
+                      id="guardianWorkplace"
+                      name="guardianWorkplace"
+                      placeholder="أدخل جهة عمل ولي الأمر"
+                    />
+                    <span
+                      class="field__error"
+                      data-error-for="guardianWorkplace"
+                    ></span>
+                  </div>
+
+                  <div class="field">
+                    <label for="guardianPhone">هاتف ولي الأمر</label>
+                    <input
+                      type="tel"
+                      id="guardianPhone"
+                      name="guardianPhone"
+                      placeholder="أدخل هاتف ولي الأمر"
+                    />
+                    <span
+                      class="field__error"
+                      data-error-for="guardianPhone"
+                    ></span>
+                  </div>
+
+                  <div class="field field--span-2">
+                    <label for="guardianAddress">عنوان ولي الأمر</label>
+                    <input
+                      type="text"
+                      id="guardianAddress"
+                      name="guardianAddress"
+                      placeholder="أدخل عنوان ولي الأمر"
+                    />
+                    <span
+                      class="field__error"
+                      data-error-for="guardianAddress"
+                    ></span>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <div class="form-actions">
+              <button type="button" class="btn btn--outline" id="cancelBtn">
+                إلغاء
+              </button>
+              <button
+                type="button"
+                class="btn btn--outline"
+                id="backStepBtn"
+                hidden
+              >
+                <i class="fa-solid fa-arrow-left"></i> رجوع
+              </button>
+              <button type="button" class="btn btn--outline" id="continueBtn">
+                استكمال البيانات <i class="fa-solid fa-arrow-left"></i>
+              </button>
+              <button type="submit" class="btn btn--primary" id="saveBtn">
+                <i class="fa-solid fa-floppy-disk btn__icon"></i>
+                <span class="btn__label">إرسال</span>
+              </button>
+            </div>
+          </form>
+        </main>
+      </div>
+    </div>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+    <div class="modal-overlay" id="successModal" hidden>
+      <div
+        class="modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="successModalTitle"
+      >
+        <div class="modal__icon"><i class="fa-solid fa-circle-check"></i></div>
+        <h3 class="modal__title" id="successModalTitle">تم بنجاح</h3>
+        <p class="modal__text" id="successModalText">
+          تم إرسال بيانات الطالب بنجاح
+        </p>
+        <div class="modal__actions">
+          <button
+            type="button"
+            class="btn btn--outline"
+            id="viewOfficialFormBtn"
+          >
+            <i class="fa-solid fa-file-lines"></i> عرض استمارة البيانات
+          </button>
+          <button
+            type="button"
+            class="btn btn--primary modal__close"
+            id="successModalCloseBtn"
+          >
+            تمام
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!--  Official Student Data -->
+    <div
+      class="modal-overlay modal-overlay--form"
+      id="officialFormModal"
+      hidden
+    >
+      <div
+        class="modal modal--doc"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="officialFormTitle"
+      >
+        <div class="doc-modal__toolbar">
+          <button
+            type="button"
+            class="btn btn--outline"
+            id="officialFormCloseBtn"
+          >
+            <i class="fa-solid fa-xmark"></i> إغلاق
+          </button>
+          <button
+            type="button"
+            class="btn btn--primary"
+            id="officialFormPrintBtn"
+          >
+            <i class="fa-solid fa-print"></i> طباعة / حفظ PDF
+          </button>
+        </div>
+
+        <div class="official-form" id="officialFormPrintArea">
+          <header class="official-form__header">
+            <div class="official-form__logo">
+              <i class="fa-solid fa-graduation-cap"></i>
+            </div>
+            <div class="official-form__heading">
+              <span>وزارة التعليم العالي</span>
+              <strong>المعهد العالي للهندسة والتكنولوجيا</strong>
+              <span>بدمياط الجديدة</span>
+            </div>
+          </header>
+
+          <h2 class="official-form__title" id="officialFormTitle">
+            استمارة بيانات الطالب المستجد للعام الجامعي 2026/2025
+          </h2>
+
+          <table class="official-table">
+            <tbody>
+              <tr class="official-table__section">
+                <td colspan="4">البيانات الشخصية</td>
+              </tr>
+              <tr>
+                <th>اسم الطالب رباعي (عربي)</th>
+                <td id="of-arabName">—</td>
+                <th>اسم الطالب رباعي (إنجليزي)</th>
+                <td id="of-engName">—</td>
+              </tr>
+              <tr>
+                <th>عنوان الطالب</th>
+                <td colspan="3" id="of-address">—</td>
+              </tr>
+              <tr>
+                <th>المحافظة</th>
+                <td id="of-gov">—</td>
+                <th>تاريخ الميلاد</th>
+                <td id="of-dob">—</td>
+              </tr>
+              <tr>
+                <th>الدولة</th>
+                <td id="of-country">—</td>
+                <th>الديانة</th>
+                <td id="of-religion">—</td>
+              </tr>
+              <tr>
+                <th>النوع</th>
+                <td id="of-gender">—</td>
+                <th>الحالة الاجتماعية</th>
+                <td id="of-marital">—</td>
+              </tr>
+              <tr>
+                <th>رقم التليفون</th>
+                <td id="of-phone">—</td>
+                <th id="of-idLabel">الرقم القومي</th>
+                <td id="of-idNumber">—</td>
+              </tr>
+              <tr>
+                <th>نوع البطاقة</th>
+                <td id="of-idType">—</td>
+                <th>جهة صدور البطاقة</th>
+                <td id="of-cardIssuePlace">—</td>
+              </tr>
+
+              <tr class="official-table__section">
+                <td colspan="4" id="of-guardianSectionTitle">
+                  بيانات ولي الأمر
+                </td>
+              </tr>
+              <tr>
+                <th>اسم ولي الأمر</th>
+                <td id="of-guardianName">—</td>
+                <th>درجة القرابة</th>
+                <td id="of-guardianRelation">—</td>
+              </tr>
+              <tr>
+                <th>جهة عمل ولي الأمر</th>
+                <td id="of-guardianWorkplace">—</td>
+                <th>تليفون ولي الأمر</th>
+                <td id="of-guardianPhone">—</td>
+              </tr>
+              <tr>
+                <th>اسم الأم</th>
+                <td id="of-motherName">—</td>
+                <th>وظيفة الأم</th>
+                <td id="of-motherJob">—</td>
+              </tr>
+
+              <tr class="official-table__section">
+                <td colspan="4">بيانات المؤهل الحالي</td>
+              </tr>
+              <tr>
+                <th>المؤهل</th>
+                <td id="of-qualification">—</td>
+                <th>سنة المؤهل</th>
+                <td id="of-qualificationYear">—</td>
+              </tr>
+              <tr>
+                <th>رقم جلوس الثانوية</th>
+                <td id="of-seatNumber">—</td>
+                <th>المجموع</th>
+                <td id="of-total">—</td>
+              </tr>
+              <tr>
+                <th>اسم المدرسة الثانوية</th>
+                <td colspan="3" id="of-schoolName">—</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <p class="official-form__declaration">
+            أقر أنا الطالب المذكور
+            <span id="of-declarationName">أعلاه</span> بأن هذه البيانات صحيحة
+            وعلى مسئوليتي الخاصة، وفي حالة حدوث أى تغيير بها أتعهد بالقيام
+            بإعادة تعديل هذه الاستمارة في مكتب شئون الطلاب طوال فترة الدراسة
+            بالمعهد.
+          </p>
+
+          <div class="official-form__signatures">
+            <div class="official-form__signature">
+              <span>توقيع الطالب</span>
+              <div class="official-form__signature-line"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="./addStudent.js"></script>
+    <script src="./officialForm.js"></script>
+  </body>
+</html>

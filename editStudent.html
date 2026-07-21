@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>تعديل بيانات الطالب | نظام الإدارة</title>
+    <link rel="stylesheet" href="./studentEditForm.css" />
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+    <script>
+      (function () {
+        var saved = localStorage.getItem("theme");
+        if (saved === "dark")
+          document.documentElement.setAttribute("data-theme", "dark");
+      })();
+    </script>
+  </head>
+  <body>
+    <div class="main">
+      <header class="topbar">
+        <div></div>
+        <div class="topbar__actions">
+          <button
+            class="theme-toggle"
+            id="themeToggleBtn"
+            aria-label="تبديل الوضع الليلي"
+          >
+            <i class="fa-solid fa-sun" id="themeIcon"></i>
+          </button>
+          <div class="topbar__admin">
+            <span>المشرف</span>
+            <i class="fa-solid fa-chevron-down topbar__chevron"></i>
+          </div>
+        </div>
+      </header>
+
+      <main class="page">
+        <div class="page__top">
+          <div>
+            <nav class="breadcrumb" aria-label="مسار التنقل">
+              <a href="./studentsList.html">الطلاب</a>
+              <span>/</span>
+              <a href="#" id="breadcrumbProfileLink">الملف الشخصي</a>
+              <span>/</span>
+              <span>تعديل البيانات</span>
+            </nav>
+            <h1 class="page__title">تعديل بيانات الطالب</h1>
+          </div>
+
+          <button class="btn btn--outline" id="backBtn">
+            <i class="fa-solid fa-arrow-right"></i> الرجوع للملف الشخصي
+          </button>
+        </div>
+
+        <div class="state-box" id="loadingState">
+          <i class="fa-solid fa-spinner fa-spin"></i>
+          جاري تحميل بيانات الطالب...
+        </div>
+
+        <div class="state-box state-box--error" id="errorState" hidden>
+          <i class="fa-solid fa-triangle-exclamation"></i>
+          <span id="errorMessage">تعذر إيجاد بيانات الطالب</span>
+        </div>
+
+        <div class="notice" id="infoNotice" hidden>
+          <div class="notice__icon">
+            <i class="fa-solid fa-circle-info"></i>
+          </div>
+          <div>
+            <h3 class="notice__title">ملاحظة</h3>
+            <p class="notice__text">
+              البيانات المميزة بأيقونة
+              <span class="icon-style"> <i class="fa-solid fa-lock"></i></span>
+              لا يمكن تعديلها مباشرة. اضغطي على زر الطلب
+              <span class="icon-style"
+                ><i class="fa-solid fa-paper-plane"></i
+              ></span>
+              بجانب الحقل لإرسال طلب تعديل للإدارة، وبمجرد الموافقة هيبقى الحقل
+              قابل للتعديل.
+            </p>
+          </div>
+        </div>
+
+        <form class="form-card" id="editForm" hidden novalidate>
+          <div class="form-card__banner"></div>
+
+          <div class="form-card__header">
+            <div class="form-card__photo-wrap">
+              <img class="form-card__photo" id="studentPhoto" alt="" />
+              <button
+                type="button"
+                class="photo-request-btn"
+                id="photoRequestBtn"
+                title="طلب تغيير الصورة"
+                aria-label="طلب تغيير الصورة"
+              >
+                <i class="fa-solid fa-camera"></i>
+              </button>
+            </div>
+            <div class="form-card__heading">
+              <h2 class="form-card__name" id="studentName"></h2>
+              <span class="form-card__id" id="studentIdText"></span>
+            </div>
+          </div>
+
+          <div class="form-body">
+            <section class="form-section">
+              <h3 class="form-section__title">
+                <i class="fa-solid fa-id-card"></i> البيانات الشخصية
+              </h3>
+              <div class="form-grid" id="section-personal"></div>
+            </section>
+
+            <section class="form-section">
+              <h3 class="form-section__title">
+                <i class="fa-solid fa-graduation-cap"></i> البيانات الأكاديمية
+              </h3>
+              <div class="form-grid" id="section-academic"></div>
+            </section>
+
+            <section class="form-section">
+              <h3 class="form-section__title">
+                <i class="fa-solid fa-address-book"></i> بيانات التواصل
+              </h3>
+              <div class="form-grid" id="section-contact"></div>
+            </section>
+          </div>
+
+          <div class="form-footer">
+            <button class="btn btn--primary" id="saveBtn" type="submit">
+              <i class="fa-solid fa-floppy-disk"></i> حفظ التعديلات
+            </button>
+            <button class="btn btn--outline" id="cancelBtn" type="button">
+              إلغاء
+            </button>
+          </div>
+        </form>
+      </main>
+    </div>
+
+    <div class="modal-overlay" id="requestOverlay" hidden>
+      <div class="modal" role="alertdialog" aria-live="assertive">
+        <button class="modal__close" id="requestModalClose" aria-label="إغلاق">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+        <h2 class="modal__title">طلب تعديل بيانات</h2>
+        <p class="modal__text">
+          هيتم إرسال طلبك للإدارة للموافقة على تعديل هذا الحقل.
+        </p>
+
+        <div class="modal__field">
+          <label>الحقل المطلوب تعديله</label>
+          <input type="text" id="requestFieldLabel" disabled />
+        </div>
+
+        <div class="modal__field">
+          <label>سبب التعديل (اختياري)</label>
+          <textarea
+            id="requestReason"
+            placeholder="اكتبي سبب طلب التعديل..."
+          ></textarea>
+        </div>
+
+        <div class="modal__actions">
+          <button class="btn btn--primary" id="submitRequestBtn">
+            <i class="fa-solid fa-paper-plane"></i> إرسال الطلب
+          </button>
+          <button class="btn btn--outline" id="cancelRequestBtn">إلغاء</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+    <script src="./studentEditForm.js"></script>
+  </body>
+</html>

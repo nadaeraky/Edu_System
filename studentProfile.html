@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>الملف الشخصي للطالب | نظام الإدارة</title>
+    <link rel="stylesheet" href="./studentProfile.css" />
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+    <script>
+      (function () {
+        var saved = localStorage.getItem("theme");
+        if (saved === "dark")
+          document.documentElement.setAttribute("data-theme", "dark");
+      })();
+    </script>
+  </head>
+  <body>
+    <div class="main">
+      <header class="topbar">
+        <div></div>
+        <div class="topbar__actions">
+          <button
+            class="theme-toggle"
+            id="themeToggleBtn"
+            aria-label="تبديل الوضع الليلي"
+          >
+            <i class="fa-solid fa-sun" id="themeIcon"></i>
+          </button>
+          <div class="topbar__admin">
+            <span>المشرف</span>
+            <i class="fa-solid fa-chevron-down topbar__chevron"></i>
+          </div>
+        </div>
+      </header>
+
+      <main class="page">
+        <div class="page__top">
+          <div>
+            <nav class="breadcrumb" aria-label="مسار التنقل">
+              <a href="./studentsList.html">الطلاب</a>
+              <span>/</span>
+              <span>الملف الشخصي</span>
+            </nav>
+            <h1 class="page__title">الملف الشخصي للطالب</h1>
+          </div>
+
+          <button class="btn btn--outline" id="backBtn">
+            <i class="fa-solid fa-arrow-right"></i> الرجوع لقائمة الطلاب
+          </button>
+        </div>
+
+        <div class="state-box" id="loadingState">
+          <i class="fa-solid fa-spinner fa-spin"></i>
+          جاري تحميل بيانات الطالب...
+        </div>
+
+        <div class="state-box state-box--error" id="errorState" hidden>
+          <i class="fa-solid fa-triangle-exclamation"></i>
+          <span id="errorMessage">تعذر إيجاد بيانات الطالب</span>
+        </div>
+
+        <div class="profile" id="profileCard" hidden>
+          <div class="profile__banner"></div>
+
+          <div class="profile__header">
+            <img class="profile__photo" id="studentPhoto" alt="" />
+            <div class="profile__heading">
+              <h2 class="profile__name" id="studentName"></h2>
+              <span class="profile__id" id="studentIdText"></span>
+              <span class="badge" id="statusBadge"></span>
+            </div>
+          </div>
+
+          <div class="profile__body">
+            <section class="info-section">
+              <h3 class="info-section__title">
+                <i class="fa-solid fa-id-card"></i> البيانات الشخصية
+              </h3>
+              <div class="info-grid">
+                <div class="info-field">
+                  <div class="info-field__label"> اسم الطالب رباعي (عربي)</div>
+                  <div class="info-field__value" id="f_fullName">—</div>
+                </div>
+                <div class="info-field">
+                  <div class="info-field__label">رقم الهوية</div>
+                  <div class="info-field__value" id="f_nationalId">—</div>
+                </div>
+                <div class="info-field">
+                  <div class="info-field__label">النوع</div>
+                  <div class="info-field__value" id="f_gender">—</div>
+                </div>
+                <div class="info-field">
+                  <div class="info-field__label">تاريخ الميلاد</div>
+                  <div class="info-field__value" id="f_birthDate">—</div>
+                </div>
+                <div class="info-field">
+                  <div class="info-field__label">العنوان</div>
+                  <div class="info-field__value" id="f_address">—</div>
+                </div>
+              </div>
+            </section>
+
+            <section class="info-section">
+              <h3 class="info-section__title">
+                <i class="fa-solid fa-graduation-cap"></i> البيانات الأكاديمية
+              </h3>
+              <div class="info-grid">
+                <div class="info-field">
+                  <div class="info-field__label">الرقم الجامعي</div>
+                  <div class="info-field__value" id="f_studentId">—</div>
+                </div>
+                <div class="info-field">
+                  <div class="info-field__label">القسم</div>
+                  <div class="info-field__value" id="f_department">—</div>
+                </div>
+                <div class="info-field">
+                  <div class="info-field__label">المستوى</div>
+                  <div class="info-field__value" id="f_level">—</div>
+                </div>
+                <div class="info-field">
+                  <div class="info-field__label">العام الدراسي</div>
+                  <div class="info-field__value" id="f_academicYear">—</div>
+                </div>
+                <div class="info-field">
+                  <div class="info-field__label">تاريخ الالتحاق</div>
+                  <div class="info-field__value" id="f_enrollmentDate">—</div>
+                </div>
+              </div>
+            </section>
+
+            <section class="info-section">
+              <h3 class="info-section__title">
+                <i class="fa-solid fa-address-book"></i> بيانات التواصل
+              </h3>
+              <div class="info-grid">
+                <div class="info-field">
+                  <div class="info-field__label">البريد الإلكتروني</div>
+                  <div class="info-field__value" id="f_email">—</div>
+                </div>
+                <div class="info-field">
+                  <div class="info-field__label">رقم الهاتف</div>
+                  <div class="info-field__value" id="f_phone">—</div>
+                </div>
+                <div class="info-field">
+                  <div class="info-field__label">هاتف ولي الأمر</div>
+                  <div class="info-field__value" id="f_guardianPhone">—</div>
+                </div>
+              </div>
+            </section>
+          </div>
+
+          <div class="profile__footer">
+            <button class="btn btn--primary" id="editBtn">
+              <i class="fa-solid fa-pen"></i> تعديل بيانات الطالب
+            </button>
+             <button class="btn btn--primary" id="deleteBtn">
+              <i class="fa-solid fa-trash"></i> حذف بيانات الطالب
+            </button>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <!-- Confirm delete popup -->
+    <div class="modal-overlay" id="deleteOverlay" hidden>
+      <div class="modal" role="alertdialog" aria-live="assertive">
+        <button class="modal__close" id="deleteModalClose" aria-label="إغلاق">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+        <div class="modal__icon modal__icon--danger">
+          <i class="fa-solid fa-trash"></i>
+        </div>
+        <h2 class="modal__title">تأكيد الحذف</h2>
+        <p class="modal__text">
+          هل أنت متأكدة من حذف الطالب
+          <strong id="deleteStudentName"></strong>؟<br />
+          سيتم حذف بياناته نهائيًا من قاعدة البيانات ولا يمكن التراجع عن هذا
+          الإجراء.
+        </p>
+        <div class="modal__actions">
+          <button class="btn btn--danger" id="confirmDeleteBtn">
+            <i class="fa-solid fa-trash"></i> حذف
+          </button>
+          <button class="btn btn--outline" id="cancelDeleteBtn">إلغاء</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+    <script src="./studentProfile.js"></script>
+  </body>
+</html>
